@@ -15,6 +15,6 @@ permissions:
   pull-requests: write # for updating pr
 
 jobs:
-  build-go-mask:
+  build:
     uses: ./.github/workflows/containifyci.yaml
     secrets: inherit

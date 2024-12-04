@@ -18,12 +18,12 @@ permissions:
   pull-requests: write # for updating pr
 
 jobs:
-  build-go-mask:
+  build:
     uses: ./.github/workflows/containifyci.yaml
     secrets: inherit
-  release-go-mask:
+  release:
     runs-on: ubuntu-latest
-    needs: build-go-mask
+    needs: build
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
