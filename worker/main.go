@@ -8,6 +8,7 @@ import (
 	"go.temporal.io/sdk/client"
 	"go.temporal.io/sdk/worker"
 
+	"github.com/containifyci/go-self-update/pkg/systemd"
 	"github.com/containifyci/go-self-update/pkg/updater"
 	"github.com/containifyci/temporal-worker/pkg/helloworld"
 )
@@ -29,7 +30,10 @@ func main() {
 	// Get the command
 	switch command {
 	case "update":
-		u := updater.NewUpdater("temporal-worker", "containifyci", "temporal-worker", version)
+		u := updater.NewUpdater(
+			"temporal-worker", "containifyci", "temporal-worker", version,
+			updater.WithUpdateHook(systemd.SystemdRestartHook("temporal-worker")),
+		)
 		updated, err := u.SelfUpdate()
 		if err != nil {
 			log.Fatalln("Update failed:", err)
