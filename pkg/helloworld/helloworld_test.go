@@ -16,10 +16,15 @@ func Test_Workflow(t *testing.T) {
 	testSuite := &testsuite.WorkflowTestSuite{}
 	env := testSuite.NewTestWorkflowEnvironment()
 
+	data := GreetingData{
+		FirstName: "Temporal",
+		Name:      "World",
+	}
+
 	// Mock activity implementation
 	env.OnActivity(Activity, mock.Anything, "Temporal").Return("Hello Temporal!", nil)
 
-	env.ExecuteWorkflow(Workflow, "Temporal")
+	env.ExecuteWorkflow(Workflow, data)
 
 	require.True(t, env.IsWorkflowCompleted())
 	require.NoError(t, env.GetWorkflowError())
@@ -83,7 +88,12 @@ func Test_Using_DevServer(t *testing.T) {
 		TaskQueue: taskQ,
 	}
 
-	we, err := c.ExecuteWorkflow(context.Background(), workflowOptions, Workflow, "Temporal")
+	data := GreetingData{
+		FirstName: "Temporal",
+		Name:      "World",
+	}
+
+	we, err := c.ExecuteWorkflow(context.Background(), workflowOptions, Workflow, data)
 	require.NoError(t, err)
 	require.NotNil(t, we)
 

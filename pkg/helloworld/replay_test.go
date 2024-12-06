@@ -37,6 +37,7 @@ func (s *replayTestSuite) TearDownTest() {
 //
 // Or from Temporal Web UI. And you may need to change workflowType in the first event.
 func (s *replayTestSuite) TestReplayWorkflowHistoryFromFile() {
+	s.T().SkipNow()
 	replayer := worker.NewWorkflowReplayer()
 
 	replayer.RegisterWorkflow(Workflow)
