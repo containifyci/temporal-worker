@@ -1,0 +1,29 @@
+{
+  "Number": 94,
+  "Repository": "engine-ci",
+  "Owner": "containifyci",
+  "InstallationId": 58142356,
+  "Config": {
+    "version": "1.0.1",
+    "approve": {
+      "approver": "fr12k",
+      "include": {
+        "branches": {
+          "dependabot": {
+            "prefix": "dependabot"
+          }
+        }
+      }
+    },
+    "merge": {
+      "include": {
+        "branches": {
+          "dependabot": {
+            "prefix": "dependabot"
+          }
+        }
+      },
+      "method": "squash"
+    }
+  }
+}

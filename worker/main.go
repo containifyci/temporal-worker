@@ -2,21 +2,28 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"log/slog"
 	"os"
 
 	"go.temporal.io/sdk/client"
+	"go.temporal.io/sdk/log"
 	"go.temporal.io/sdk/worker"
+
+	"github.com/dusted-go/logging/prettylog"
+
+	"github.com/containifyci/dunebot/pkg/config"
 
 	"github.com/containifyci/go-self-update/pkg/systemd"
 	"github.com/containifyci/go-self-update/pkg/updater"
 	"github.com/containifyci/temporal-worker/pkg/helloworld"
+	"github.com/containifyci/temporal-worker/pkg/workflows/github"
 )
 
 var (
-	version = "dev"
-	commit  = "none"
-	date    = "unknown"
+	version          = "dev"
+	commit           = "none"
+	date             = "unknown"
+	temporalHostPort = os.Getenv("TEMPORAL_HOST")
 )
 
 func main() {
@@ -36,7 +43,7 @@ func main() {
 		)
 		updated, err := u.SelfUpdate()
 		if err != nil {
-			log.Fatalln("Update failed:", err)
+			fmt.Printf("Update failed %+v\n", err)
 		}
 		if updated {
 			fmt.Println("Update completed successfully!")
@@ -49,20 +56,60 @@ func main() {
 }
 
 func start() {
+	logOpts := slog.HandlerOptions{
+		Level:       slog.LevelDebug,
+		AddSource:   true,
+		ReplaceAttr: nil,
+	}
+
+	prettyHandler := prettylog.NewHandler(&logOpts)
+	logger := slog.New(prettyHandler)
+	// logger := slog.New(prettyHandler)
+	// logger := slog.New(slog.NewJSONHandler(prettyHandler, &slog.HandlerOptions{
+	// 	Level: slog.LevelDebug,
+	// }))
+	slog.SetDefault(logger)
+
+	if temporalHostPort == "" {
+		temporalHostPort = "localhost:7233"
+	}
+
 	// The client and worker are heavyweight objects that should be created once per process.
-	c, err := client.Dial(client.Options{})
+	// c, err := client.Dial(client.Options{})
+	c, err := client.Dial(client.Options{
+		Logger:   log.NewStructuredLogger(logger),
+		HostPort: temporalHostPort,
+		// MetricsHandler: sdktally.NewMetricsHandler(newPrometheusScope(prometheus.Configuration{
+		// 	ListenAddress: "0.0.0.0:8090",
+		// 	TimerType:     "histogram",
+		// })),
+	})
 	if err != nil {
-		log.Fatalln("Unable to create client", err)
+		logger.Error("Unable to create client", "error", err)
+		os.Exit(1)
 	}
 	defer c.Close()
 
 	w := worker.New(c, "hello-world", worker.Options{})
 
+	//TODO set the needed DuneBot secret
+	cfg, err := config.Load()
+	if err != nil {
+		panic(err)
+	}
+
+	cc := github.NewClientCreator(cfg)
+
 	w.RegisterWorkflow(helloworld.Workflow)
+	w.RegisterWorkflow(github.PullRequestReviewWorkflow)
 	w.RegisterActivity(helloworld.Activity)
+	w.RegisterActivity(github.PullRequestReviewActivities{
+		CC:          cc,
+		Config:      *cfg,
+	}.PullRequestReviewActivity)
 
 	err = w.Run(worker.InterruptCh())
 	if err != nil {
-		log.Fatalln("Unable to start worker", err)
+		logger.Error("Unable to start worker", "error", err)
 	}
 }

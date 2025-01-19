@@ -23,5 +23,5 @@ func main() {
 	opts2.Properties = map[string]*build.ListValue{
 		"goreleaser": build.NewList("true"),
 	}
-	build.Serve(opts, opts2)
+	build.BuildAsync(opts, opts2)
 }
