@@ -17,8 +17,8 @@ import (
 
 type (
 	PullRequestReviewActivities struct {
-		Config      config.Config
-		CC          githubapp.ClientCreator
+		Config config.Config
+		CC     githubapp.ClientCreator
 	}
 )
 
