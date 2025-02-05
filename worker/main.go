@@ -94,6 +94,11 @@ func start() {
 
 	//TODO set the needed DuneBot secret
 	cfg, err := config.Load()
+	cfg.AppConfig = config.ApplicationConfig{
+		ReviewerConfig: config.ReviewerConfig{
+			Type: "direct",
+		},
+	}
 	if err != nil {
 		panic(err)
 	}
@@ -101,11 +106,12 @@ func start() {
 	cc := github.NewClientCreator(cfg)
 
 	w.RegisterWorkflow(helloworld.Workflow)
+	w.RegisterWorkflow(github.PullRequestQueueWorkflow)
 	w.RegisterWorkflow(github.PullRequestReviewWorkflow)
 	w.RegisterActivity(helloworld.Activity)
 	w.RegisterActivity(github.PullRequestReviewActivities{
-		CC:          cc,
-		Config:      *cfg,
+		CC:     cc,
+		Config: *cfg,
 	}.PullRequestReviewActivity)
 
 	err = w.Run(worker.InterruptCh())

@@ -6,8 +6,8 @@ github.com/bradleyfalzon/ghinstallation/v2 v2.11.0/go.mod h1:0LWKQwOHewXO/1acI6T
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
-github.com/containifyci/dunebot v0.0.2 h1:vdWCpi4Idh4980KZ4YHt2fvF/4mLK9lZ/MkVYKD9pgM=
-github.com/containifyci/dunebot v0.0.2/go.mod h1:hsUx3TmXR0xRS5eggfcOVnsmV5Rh3iWheqeQvzJl4gA=
+github.com/containifyci/dunebot v0.0.3 h1:ZJAhkja4EGmu96Fvf87K/cv8kjbHvKXkc12qh6oAK+8=
+github.com/containifyci/dunebot v0.0.3/go.mod h1:hsUx3TmXR0xRS5eggfcOVnsmV5Rh3iWheqeQvzJl4gA=
 github.com/containifyci/go-self-update v0.2.2 h1:qbactPBL9Ad90bS6v5dIjulNFwqxj/C+IK8ZdFxe9CM=
 github.com/containifyci/go-self-update v0.2.2/go.mod h1:4/1xCL9SjqmoDIrF5Y5qMUbGRxIt2vvXxHFBGuHcy/c=
 github.com/containifyci/oauth2-storage v0.2.0 h1:i0VmvRlHV04OcuSoIAhA1hCqeo4RD/TdK2jNV5vAhHQ=
