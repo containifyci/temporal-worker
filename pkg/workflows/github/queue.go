@@ -85,8 +85,7 @@ func PullRequestQueueWorkflow(ctx workflow.Context) error {
 				StartToCloseTimeout: 10 * time.Minute,
 			}
 			actCtx := workflow.WithActivityOptions(ctx, options)
-			input := review.PullRequestReview{}
-			err := workflow.ExecuteActivity(actCtx, a.PullRequestReviewActivity, input).Get(ctx, &result)
+			err := workflow.ExecuteActivity(actCtx, a.PullRequestReviewActivity, task).Get(ctx, &result)
 			if err != nil {
 				logger.Error("Activity failed.", "Error", err)
 			}
