@@ -1,6 +1,6 @@
 module .containifyci
 
-go 1.23.3
+go 1.24.2
 
 require github.com/containifyci/engine-ci/client v0.8.0
 
