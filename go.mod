@@ -1,17 +1,17 @@
 module github.com/containifyci/temporal-worker
 
-go 1.24.4
+go 1.25.0
 
 require (
-	github.com/containifyci/dunebot v0.2.2
+	github.com/containifyci/dunebot v0.3.0
 	github.com/containifyci/go-self-update v0.2.3
 	github.com/dusted-go/logging v1.3.0
 	github.com/golang/mock v1.6.0
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
-	github.com/palantir/go-githubapp v0.38.0
-	github.com/stretchr/testify v1.10.0
+	github.com/palantir/go-githubapp v0.38.1
+	github.com/stretchr/testify v1.11.1
 	go.temporal.io/api v1.52.0
-	go.temporal.io/sdk v1.35.0
+	go.temporal.io/sdk v1.36.0
 )
 
 require (
@@ -39,7 +39,7 @@ require (
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
-	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.3 // indirect
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
@@ -67,7 +67,7 @@ require (
 	golang.org/x/net v0.42.0 // indirect
 	golang.org/x/oauth2 v0.30.0 // indirect
 	golang.org/x/sync v0.16.0 // indirect
-	golang.org/x/sys v0.34.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/term v0.33.0 // indirect
 	golang.org/x/text v0.27.0 // indirect
 	golang.org/x/time v0.11.0 // indirect
