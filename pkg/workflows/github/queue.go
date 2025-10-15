@@ -28,9 +28,9 @@ func PullRequestQueueWorkflow(ctx workflow.Context) error {
 			InitialInterval:    30 * time.Second,
 			BackoffCoefficient: 1.5,
 			MaximumInterval:    10 * time.Minute,
-			MaximumAttempts:    5,
+			MaximumAttempts:    2,
 		},
-		StartToCloseTimeout: 20 * time.Minute,
+		StartToCloseTimeout: 45 * time.Minute,
 	}
 
 	ctx = workflow.WithActivityOptions(ctx, ao)
@@ -80,9 +80,9 @@ func PullRequestQueueWorkflow(ctx workflow.Context) error {
 					InitialInterval:    30 * time.Second,
 					BackoffCoefficient: 1.5,
 					MaximumInterval:    10 * time.Minute,
-					MaximumAttempts:    2,
+					MaximumAttempts:    3,
 				},
-				StartToCloseTimeout: 10 * time.Minute,
+				StartToCloseTimeout: 15 * time.Minute,
 			}
 			actCtx := workflow.WithActivityOptions(ctx, options)
 			err := workflow.ExecuteActivity(actCtx, a.PullRequestReviewActivity, task).Get(ctx, &result)
