@@ -8,3 +8,12 @@ go run helloworld/worker/main.go
 ```
 go run helloworld/starter/main.go
 ```
+
+# Completed Features
+
+* Unit test for RunEngineCI activity (runs 'engine-ci version')
+* Auto-download engine-ci from GitHub releases if not available in PATH
+* Refactored package structure with reusable activities:
+  - `pkg/activities/git` - Generic git operations (CloneRepo)
+  - `pkg/activities/filesystem` - Generic filesystem operations (CleanupDirectory)
+  - `pkg/workflows/engineci` - Engine-CI specific logic (RunEngineCI) 
