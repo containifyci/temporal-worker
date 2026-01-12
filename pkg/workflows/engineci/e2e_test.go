@@ -43,7 +43,7 @@ func TestEngineCIWorkflow_E2E_SingleJob(t *testing.T) {
 		wInChan <-chan interface{}
 	)
 
-	taskQ := "hello-world"
+	taskQ := "engine-ci-queue"
 
 	// Start worker in background
 	ch := make(chan interface{})
@@ -143,7 +143,7 @@ func TestEngineCIWorkflow_E2E_MultipleJobs(t *testing.T) {
 		wInChan <-chan interface{}
 	)
 
-	taskQ := "hello-world"
+	taskQ := "engine-ci-queue"
 
 	// Start worker in background
 	ch := make(chan interface{})

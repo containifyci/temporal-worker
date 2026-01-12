@@ -3,7 +3,6 @@ package filesystem
 import (
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"testing"
 
@@ -46,22 +45,15 @@ func TestCleanupDirectory_NonExistent(t *testing.T) {
 }
 
 func TestCleanupDirectory_ErrorHandling(t *testing.T) {
-	if runtime.GOOS == "windows" {
-		t.Skip("Skipping permission test on Windows")
+	removalFunc = func(path string) error {
+		return os.ErrPermission
 	}
+	t.Cleanup(func() {
+		removalFunc = os.RemoveAll
+	})
 
 	env := setupTestEnv(t)
-	parentDir := tempDir(t)
-	childDir := filepath.Join(parentDir, "child")
-
-	require.NoError(t, os.MkdirAll(childDir, 0755))
-	defer func() {
-		os.Chmod(parentDir, 0755)
-		os.RemoveAll(parentDir)
-	}()
-
-	require.NoError(t, os.Chmod(parentDir, 0555))
-
-	_, err := env.ExecuteActivity(CleanupDirectory, childDir)
+	_, err := env.ExecuteActivity(CleanupDirectory, tempDir(t))
 	assert.Error(t, err)
+	assert.ErrorContains(t, err, os.ErrPermission.Error())
 }

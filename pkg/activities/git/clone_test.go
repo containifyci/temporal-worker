@@ -24,9 +24,9 @@ func tempDir(t *testing.T) string {
 func TestCloneRepo_Success(t *testing.T) {
 	env := setupTestEnv(t)
 	targetDir := tempDir(t)
-	defer os.RemoveAll(targetDir)
+	t.Cleanup(func() { _ = os.RemoveAll(targetDir) })
 
-	val, err := env.ExecuteActivity(CloneRepo, "https://github.com/containifyci/engine-ci", "main", targetDir)
+	val, err := env.ExecuteActivity(CloneRepo, "https://github.com/fr12k/go-file", "main", targetDir)
 	require.NoError(t, err)
 
 	var workDir string
@@ -41,14 +41,14 @@ func TestCloneRepo_Success(t *testing.T) {
 func TestCloneRepo_WithExistingDirectory(t *testing.T) {
 	env := setupTestEnv(t)
 	targetDir := tempDir(t)
-	defer os.RemoveAll(targetDir)
+	t.Cleanup(func() { _ = os.RemoveAll(targetDir) })
 
 	// Create existing directory with a file
 	require.NoError(t, os.MkdirAll(targetDir, 0755))
 	testFile := filepath.Join(targetDir, "testfile.txt")
 	require.NoError(t, os.WriteFile(testFile, []byte("test"), 0644))
 
-	val, err := env.ExecuteActivity(CloneRepo, "https://github.com/containifyci/engine-ci", "main", targetDir)
+	val, err := env.ExecuteActivity(CloneRepo, "https://github.com/fr12k/go-file", "main", targetDir)
 	require.NoError(t, err)
 
 	var workDir string
@@ -66,15 +66,15 @@ func TestCloneRepo_Errors(t *testing.T) {
 		ref      string
 		errorMsg string
 	}{
-		{"NonExistentRepo", "https://github.com/nonexistent-org-12345/invalidrepo-67890", "main", "git clone failed"},
-		{"InvalidBranch", "https://github.com/containifyci/engine-ci", "nonexistent-branch-xyz", "git clone failed"},
+		{"NonExistentRepo", "https://github.com/fr12k/invalidrepo-67890", "main", "git clone failed"},
+		{"InvalidBranch", "https://github.com/fr12k/go-file", "nonexistent-branch-xyz", "git clone failed"},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			env := setupTestEnv(t)
 			targetDir := tempDir(t)
-			defer os.RemoveAll(targetDir)
+			t.Cleanup(func() { _ = os.RemoveAll(targetDir) })
 
 			_, err := env.ExecuteActivity(CloneRepo, tt.repo, tt.ref, targetDir)
 			assert.Error(t, err)

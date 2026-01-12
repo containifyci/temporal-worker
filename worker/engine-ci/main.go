@@ -18,15 +18,11 @@ import (
 
 	"github.com/dusted-go/logging/prettylog"
 
-	"github.com/containifyci/dunebot/pkg/config"
-
 	"github.com/containifyci/go-self-update/pkg/systemd"
 	"github.com/containifyci/go-self-update/pkg/updater"
 	"github.com/containifyci/temporal-worker/pkg/activities/filesystem"
 	"github.com/containifyci/temporal-worker/pkg/activities/git"
-	"github.com/containifyci/temporal-worker/pkg/helloworld"
 	"github.com/containifyci/temporal-worker/pkg/workflows/engineci"
-	"github.com/containifyci/temporal-worker/pkg/workflows/github"
 )
 
 var (
@@ -36,8 +32,17 @@ var (
 	temporalHostPort = os.Getenv("TEMPORAL_HOST")
 )
 
+const (
+	// Engine-CI specific queue name
+	engineCIQueue = "engine-ci-queue"
+
+	// Concurrency limits for Engine-CI workflows
+	maxConcurrentWorkflows  = 2
+	maxConcurrentActivities = 4
+)
+
 func main() {
-	fmt.Printf("temporal-worker %s, commit %s, built at %s\n", version, commit, date)
+	fmt.Printf("temporal-worker-engine-ci %s, commit %s, built at %s\n", version, commit, date)
 	// Check for command-line arguments
 	command := "start"
 	if len(os.Args) >= 2 {
@@ -48,8 +53,8 @@ func main() {
 	switch command {
 	case "update":
 		u := updater.NewUpdater(
-			"temporal-worker", "containifyci", "temporal-worker", version,
-			updater.WithUpdateHook(systemd.SystemdRestartHook("temporal-worker")),
+			"temporal-worker-engine-ci", "containifyci", "temporal-worker", version,
+			updater.WithUpdateHook(systemd.SystemdRestartHook("temporal-worker-engine-ci")),
 		)
 		updated, err := u.SelfUpdate()
 		if err != nil {
@@ -113,7 +118,7 @@ func downloadEngineCIIfNeeded(logger *slog.Logger) error {
 	if err != nil {
 		return fmt.Errorf("failed to download engine-ci: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("failed to download engine-ci: HTTP %d", resp.StatusCode)
@@ -125,7 +130,7 @@ func downloadEngineCIIfNeeded(logger *slog.Logger) error {
 	if err != nil {
 		return fmt.Errorf("failed to create engine-ci file: %w", err)
 	}
-	defer outFile.Close()
+	defer func() { _ = outFile.Close() }()
 
 	if _, err := io.Copy(outFile, resp.Body); err != nil {
 		return fmt.Errorf("failed to write engine-ci binary: %w", err)
@@ -135,7 +140,9 @@ func downloadEngineCIIfNeeded(logger *slog.Logger) error {
 
 	// Add to PATH for current process
 	currentPath := os.Getenv("PATH")
-	os.Setenv("PATH", fmt.Sprintf("%s%c%s", localBinDir, os.PathListSeparator, currentPath))
+	if err := os.Setenv("PATH", fmt.Sprintf("%s%c%s", localBinDir, os.PathListSeparator, currentPath)); err != nil {
+		return fmt.Errorf("failed to set PATH: %w", err)
+	}
 
 	logger.Info("Added to PATH", "directory", localBinDir)
 
@@ -172,11 +179,9 @@ func start() {
 
 	prettyHandler := prettylog.NewHandler(&logOpts)
 	logger := slog.New(prettyHandler)
-	// logger := slog.New(prettyHandler)
-	// logger := slog.New(slog.NewJSONHandler(prettyHandler, &slog.HandlerOptions{
-	// 	Level: slog.LevelDebug,
-	// }))
 	slog.SetDefault(logger)
+
+	logger.Info("Starting Engine-CI Worker", "queue", engineCIQueue)
 
 	// Download engine-ci if not available
 	if err := downloadEngineCIIfNeeded(logger); err != nil {
@@ -194,15 +199,10 @@ func start() {
 		temporalHostPort = "localhost:7233"
 	}
 
-	// The client and worker are heavyweight objects that should be created once per process.
-	// c, err := client.Dial(client.Options{})
+	// Create Temporal client
 	c, err := client.Dial(client.Options{
 		Logger:   log.NewStructuredLogger(logger),
 		HostPort: temporalHostPort,
-		// MetricsHandler: sdktally.NewMetricsHandler(newPrometheusScope(prometheus.Configuration{
-		// 	ListenAddress: "0.0.0.0:8090",
-		// 	TimerType:     "histogram",
-		// })),
 	})
 	if err != nil {
 		logger.Error("Unable to create client", "error", err)
@@ -210,35 +210,17 @@ func start() {
 	}
 	defer c.Close()
 
-	w := worker.New(c, "hello-world", worker.Options{
-		MaxConcurrentWorkflowTaskExecutionSize: 2,
-		MaxConcurrentActivityExecutionSize:     4,
-		EnableSessionWorker:                    true,
+	// Create worker with Engine-CI specific settings
+	w := worker.New(c, engineCIQueue, worker.Options{
+		MaxConcurrentWorkflowTaskExecutionSize: maxConcurrentWorkflows,
+		MaxConcurrentActivityExecutionSize:     maxConcurrentActivities,
 		StickyScheduleToStartTimeout:           10 * time.Minute,
 	})
 
-	//TODO set the needed DuneBot secret
-	cfg, err := config.Load()
-	cfg.AppConfig = config.ApplicationConfig{
-		ReviewerConfig: config.ReviewerConfig{
-			Type: "direct",
-		},
-	}
-	if err != nil {
-		panic(err)
-	}
-
-	cc := github.NewClientCreator(cfg)
-
-	// Register existing workflows and activities
-	w.RegisterWorkflow(helloworld.Workflow)
-	w.RegisterWorkflow(github.PullRequestQueueWorkflow)
-	w.RegisterWorkflow(github.PullRequestReviewWorkflow)
-	w.RegisterActivity(helloworld.Activity)
-	w.RegisterActivity(github.PullRequestReviewActivities{
-		CC:     cc,
-		Config: *cfg,
-	}.PullRequestReviewActivity)
+	logger.Info("Worker configuration",
+		"maxConcurrentWorkflows", maxConcurrentWorkflows,
+		"maxConcurrentActivities", maxConcurrentActivities,
+		"stickyExecutionTimeout", "10m")
 
 	// Register Engine-CI workflows and activities
 	w.RegisterWorkflow(engineci.EngineCIRepoWorkflow)
@@ -246,6 +228,10 @@ func start() {
 	w.RegisterActivity(engineci.RunEngineCI)
 	w.RegisterActivity(filesystem.CleanupDirectory)
 
+	logger.Info("Registered Engine-CI workflows and activities")
+
+	// Start worker
+	logger.Info("Engine-CI Worker started successfully")
 	err = w.Run(worker.InterruptCh())
 	if err != nil {
 		logger.Error("Unable to start worker", "error", err)

@@ -99,7 +99,7 @@ func runEngineCIMode(c client.Client, repo, ref, argsStr string, envFlags arrayF
 		input,
 		client.StartWorkflowOptions{
 			ID:        workflowID,
-			TaskQueue: "hello-world",
+			TaskQueue: "engine-ci-queue",
 		},
 		engineci.EngineCIRepoWorkflow,
 	)

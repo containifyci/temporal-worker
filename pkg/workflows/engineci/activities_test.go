@@ -51,7 +51,7 @@ func TestRunEngineCI(t *testing.T) {
 	tempDir := "/tmp/test-engine-ci-version-" + strings.ReplaceAll(t.Name(), "/", "-")
 	err := os.MkdirAll(tempDir, 0755)
 	require.NoError(t, err)
-	defer os.RemoveAll(tempDir)
+	t.Cleanup(func() { _ = os.RemoveAll(tempDir) })
 
 	// Execute RunEngineCI with 'version' argument
 	val, err := env.ExecuteActivity(RunEngineCI, tempDir, []string{"version"}, map[string]string{})
