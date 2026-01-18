@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"time"
 
 	"go.temporal.io/sdk/client"
 	"go.temporal.io/sdk/log"
@@ -38,7 +39,7 @@ func main() {
 	switch command {
 	case "update":
 		u := updater.NewUpdater(
-			"temporal-worker", "containifyci", "temporal-worker", version,
+			"temporal-worker-dunebot", "containifyci", "temporal-worker", version,
 			updater.WithUpdateHook(systemd.SystemdRestartHook("temporal-worker")),
 		)
 		updated, err := u.SelfUpdate()
@@ -90,7 +91,12 @@ func start() {
 	}
 	defer c.Close()
 
-	w := worker.New(c, "hello-world", worker.Options{})
+	w := worker.New(c, "hello-world", worker.Options{
+		MaxConcurrentWorkflowTaskExecutionSize: 2,
+		MaxConcurrentActivityExecutionSize:     4,
+		EnableSessionWorker:                    true,
+		StickyScheduleToStartTimeout:           10 * time.Minute,
+	})
 
 	//TODO set the needed DuneBot secret
 	cfg, err := config.Load()
@@ -105,6 +111,7 @@ func start() {
 
 	cc := github.NewClientCreator(cfg)
 
+	// Register existing workflows and activities
 	w.RegisterWorkflow(helloworld.Workflow)
 	w.RegisterWorkflow(github.PullRequestQueueWorkflow)
 	w.RegisterWorkflow(github.PullRequestReviewWorkflow)

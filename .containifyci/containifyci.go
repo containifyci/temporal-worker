@@ -17,11 +17,18 @@ func main() {
 	opts.Image = ""
 	opts.File = "client/main.go"
 
-	opts2 := build.NewGoServiceBuild("temporal-worker")
+	opts2 := build.NewGoServiceBuild("temporal-worker-dunebot")
 	opts2.Image = ""
-	opts2.File = "worker/main.go"
+	opts2.File = "worker/dunebot/main.go"
 	opts2.Properties = map[string]*build.ListValue{
 		"goreleaser": build.NewList("true"),
 	}
-	build.BuildAsync(opts, opts2)
+
+	opts3 := build.NewGoServiceBuild("temporal-worker-engine-ci")
+	opts3.Image = ""
+	opts3.File = "worker/engine-ci/main.go"
+	opts3.Properties = map[string]*build.ListValue{
+		"goreleaser": build.NewList("true"),
+	}
+	build.BuildAsync(opts, opts2, opts3)
 }
