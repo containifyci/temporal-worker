@@ -20,9 +20,6 @@ func main() {
 	opts2 := build.NewGoServiceBuild("temporal-worker-dunebot")
 	opts2.Image = ""
 	opts2.File = "worker/dunebot/main.go"
-	opts2.Properties = map[string]*build.ListValue{
-		"goreleaser": build.NewList("true"),
-	}
 
 	opts3 := build.NewGoServiceBuild("temporal-worker-engine-ci")
 	opts3.Image = ""
