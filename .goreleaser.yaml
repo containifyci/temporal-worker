@@ -1,13 +1,15 @@
 version: 2
 
 builds:
-  - env:
+  - id: dunebot
+    env:
       - CGO_ENABLED=0
     main: ./worker/dunebot/main.go
     goos:
       - linux
       - darwin
-  - env:
+  - id: engine-ci
+    env:
       - CGO_ENABLED=0
     main: ./worker/engine-ci/main.go
     goos:
@@ -15,10 +17,20 @@ builds:
       - darwin
 
 archives:
-  - format: binary
-    # this name template makes the OS and Arch compatible with the results of `uname`.
-    name_template: >-
-      {{ .ProjectName }}_{{}}
-      {{- .Os }}_
-      {{- .Arch }}
-      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    - id: dunebot                                                                                                                                     
+      builds: [dunebot]                                                                                                                               
+      formats: [binary]                                                                                                                               
+      name_template: >-
+        {{ .ProjectName }}_
+        {{- .Os }}_
+        {{- .Arch }}
+        {{- if .Arm }}v{{ .Arm }}{{ end }}                                                                                          
+                                                                                                                                                      
+    - id: engine-ci                                                                                                                                   
+      builds: [engine-ci]                                                                                                                             
+      formats: [binary]                                                                                                                               
+      name_template: >-
+        {{ .ProjectName }}_
+        {{- .Os }}_
+        {{- .Arch }}
+        {{- if .Arm }}v{{ .Arm }}{{ end }}     
