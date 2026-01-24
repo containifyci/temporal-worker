@@ -39,7 +39,7 @@ func main() {
 	switch command {
 	case "update":
 		u := updater.NewUpdater(
-			"temporal-worker-dunebot", "containifyci", "temporal-worker", version,
+			"temporal-dunebot-worker", "containifyci", "temporal-worker", version,
 			updater.WithUpdateHook(systemd.SystemdRestartHook("temporal-worker")),
 		)
 		updated, err := u.SelfUpdate()
