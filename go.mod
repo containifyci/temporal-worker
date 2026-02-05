@@ -3,14 +3,14 @@ module github.com/containifyci/temporal-worker
 go 1.25.0
 
 require (
-	github.com/containifyci/dunebot v0.3.4
+	github.com/containifyci/dunebot v0.3.6
 	github.com/containifyci/go-self-update v0.2.4
 	github.com/dusted-go/logging v1.3.0
 	github.com/golang/mock v1.6.0
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
-	github.com/palantir/go-githubapp v0.40.0
+	github.com/palantir/go-githubapp v0.41.0
 	github.com/stretchr/testify v1.11.1
-	go.temporal.io/api v1.61.0
+	go.temporal.io/api v1.62.0
 	go.temporal.io/sdk v1.39.0
 )
 
@@ -28,11 +28,11 @@ require (
 	github.com/gofri/go-github-ratelimit v1.1.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.2 // indirect
-	github.com/golang-jwt/jwt/v5 v5.3.0 // indirect
+	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/google/gnostic-models v0.7.0 // indirect
 	github.com/google/go-github/v66 v66.0.0 // indirect
 	github.com/google/go-github/v75 v75.0.0 // indirect
-	github.com/google/go-github/v81 v81.0.0 // indirect
+	github.com/google/go-github/v82 v82.0.0 // indirect
 	github.com/google/go-querystring v1.2.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
@@ -62,13 +62,13 @@ require (
 	go.yaml.in/yaml/v2 v2.4.2 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0 // indirect
-	golang.org/x/mod v0.30.0 // indirect
-	golang.org/x/net v0.47.0 // indirect
+	golang.org/x/mod v0.31.0 // indirect
+	golang.org/x/net v0.48.0 // indirect
 	golang.org/x/oauth2 v0.34.0 // indirect
 	golang.org/x/sync v0.19.0 // indirect
-	golang.org/x/sys v0.39.0 // indirect
-	golang.org/x/term v0.38.0 // indirect
-	golang.org/x/text v0.32.0 // indirect
+	golang.org/x/sys v0.40.0 // indirect
+	golang.org/x/term v0.39.0 // indirect
+	golang.org/x/text v0.33.0 // indirect
 	golang.org/x/time v0.11.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20251029180050-ab9386a59fda // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20251029180050-ab9386a59fda // indirect
