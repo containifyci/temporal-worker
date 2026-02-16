@@ -10,8 +10,8 @@ require (
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
 	github.com/palantir/go-githubapp v0.41.0
 	github.com/stretchr/testify v1.11.1
-	go.temporal.io/api v1.62.0
-	go.temporal.io/sdk v1.39.0
+	go.temporal.io/api v1.62.2
+	go.temporal.io/sdk v1.40.0
 )
 
 require (
