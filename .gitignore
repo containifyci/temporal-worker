@@ -1,3 +1,14 @@
 coverage.txt
-dunebot
+/dunebot
 *.patch
+patches/dunebot/.git
+patches/dunebot/.github
+patches/dunebot/.containifyci
+patches/dunebot/Dockerfile*
+patches/dunebot/docker-compose.yaml
+patches/dunebot/.teller.yml
+patches/dunebot/.env
+patches/dunebot/example
+patches/dunebot/Makefile
+patches/dunebot/.goreleaser.yaml
+patches/dunebot/main.go

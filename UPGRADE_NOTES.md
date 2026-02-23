@@ -15,10 +15,10 @@ The upgrade from `github.com/palantir/go-githubapp` v0.41.0 to v0.42.0 requires 
 
 ### Temporary Fix (Current State)
 
-The `go.mod` file contains a `replace` directive that points to a locally patched version of dunebot:
+The `go.mod` file contains a `replace` directive that points to a locally patched version of dunebot stored in `patches/dunebot`:
 
 ```go
-replace github.com/containifyci/dunebot => /tmp/dunebot
+replace github.com/containifyci/dunebot => ./patches/dunebot
 ```
 
 This patched version has the following change in `pkg/github/client.go`:
