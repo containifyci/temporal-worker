@@ -8,7 +8,7 @@ require (
 	github.com/dusted-go/logging v1.3.0
 	github.com/golang/mock v1.6.0
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
-	github.com/palantir/go-githubapp v0.42.0
+	github.com/palantir/go-githubapp v0.43.0
 	github.com/stretchr/testify v1.11.1
 	go.temporal.io/api v1.62.2
 	go.temporal.io/sdk v1.40.0
@@ -33,6 +33,7 @@ require (
 	github.com/google/go-github/v66 v66.0.0 // indirect
 	github.com/google/go-github/v75 v75.0.0 // indirect
 	github.com/google/go-github/v83 v83.0.0 // indirect
+	github.com/google/go-github/v84 v84.0.0 // indirect
 	github.com/google/go-querystring v1.2.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
