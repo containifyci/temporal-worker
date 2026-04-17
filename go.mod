@@ -3,14 +3,14 @@ module github.com/containifyci/temporal-worker
 go 1.25.0
 
 require (
-	github.com/containifyci/dunebot v0.3.9
+	github.com/containifyci/dunebot v0.3.10
 	github.com/containifyci/go-self-update v0.2.4
 	github.com/dusted-go/logging v1.3.0
 	github.com/golang/mock v1.6.0
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
 	github.com/palantir/go-githubapp v0.43.0
 	github.com/stretchr/testify v1.11.1
-	go.temporal.io/api v1.62.8
+	go.temporal.io/api v1.62.9
 	go.temporal.io/sdk v1.42.0
 )
 
