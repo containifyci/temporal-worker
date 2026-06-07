@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/containifyci/dunebot v0.3.11
-	github.com/containifyci/go-self-update v0.2.5
+	github.com/containifyci/go-self-update v0.2.7
 	github.com/dusted-go/logging v1.3.0
 	github.com/golang/mock v1.6.0
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
@@ -45,7 +45,7 @@ require (
 	github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
 	golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0 // indirect
-	golang.org/x/mod v0.35.0 // indirect
+	golang.org/x/mod v0.36.0 // indirect
 	golang.org/x/net v0.52.0 // indirect
 	golang.org/x/oauth2 v0.36.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
