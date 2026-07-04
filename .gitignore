@@ -1,1 +1,8 @@
 coverage.txt
+artifacts.txt
+temporal-worker-client-darwin-arm64
+temporal-worker-client-linux-arm64
+temporal-worker-dunebot-darwin-arm64
+temporal-worker-dunebot-linux-arm64
+temporal-worker-engine-ci-darwin-arm64
+temporal-worker-engine-ci-linux-arm64
