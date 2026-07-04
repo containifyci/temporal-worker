@@ -16,8 +16,11 @@ import (
 
 	"github.com/containifyci/go-self-update/pkg/systemd"
 	"github.com/containifyci/go-self-update/pkg/updater"
+	gitactivity "github.com/containifyci/temporal-worker/pkg/activities/git"
+	golangactivity "github.com/containifyci/temporal-worker/pkg/activities/golang"
 	"github.com/containifyci/temporal-worker/pkg/helloworld"
 	"github.com/containifyci/temporal-worker/pkg/workflows/github"
+	golangmajor "github.com/containifyci/temporal-worker/pkg/workflows/golangmajor"
 )
 
 var (
@@ -25,6 +28,11 @@ var (
 	commit           = "none"
 	date             = "unknown"
 	temporalHostPort = os.Getenv("TEMPORAL_HOST")
+)
+
+const (
+	// DuneBot task queue name
+	dunebotQueue = "dunebot"
 )
 
 func main() {
@@ -65,10 +73,6 @@ func start() {
 
 	prettyHandler := prettylog.NewHandler(&logOpts)
 	logger := slog.New(prettyHandler)
-	// logger := slog.New(prettyHandler)
-	// logger := slog.New(slog.NewJSONHandler(prettyHandler, &slog.HandlerOptions{
-	// 	Level: slog.LevelDebug,
-	// }))
 	slog.SetDefault(logger)
 
 	if temporalHostPort == "" {
@@ -76,14 +80,9 @@ func start() {
 	}
 
 	// The client and worker are heavyweight objects that should be created once per process.
-	// c, err := client.Dial(client.Options{})
 	c, err := client.Dial(client.Options{
 		Logger:   log.NewStructuredLogger(logger),
 		HostPort: temporalHostPort,
-		// MetricsHandler: sdktally.NewMetricsHandler(newPrometheusScope(prometheus.Configuration{
-		// 	ListenAddress: "0.0.0.0:8090",
-		// 	TimerType:     "histogram",
-		// })),
 	})
 	if err != nil {
 		logger.Error("Unable to create client", "error", err)
@@ -91,7 +90,7 @@ func start() {
 	}
 	defer c.Close()
 
-	w := worker.New(c, "hello-world", worker.Options{
+	w := worker.New(c, dunebotQueue, worker.Options{
 		MaxConcurrentWorkflowTaskExecutionSize: 2,
 		MaxConcurrentActivityExecutionSize:     4,
 		EnableSessionWorker:                    true,
@@ -100,13 +99,14 @@ func start() {
 
 	//TODO set the needed DuneBot secret
 	cfg, err := config.Load()
+	if err != nil {
+		logger.Error("failed loading config", "error", err)
+		os.Exit(1)
+	}
 	cfg.AppConfig = config.ApplicationConfig{
 		ReviewerConfig: config.ReviewerConfig{
 			Type: "direct",
 		},
-	}
-	if err != nil {
-		panic(err)
 	}
 
 	cc := github.NewClientCreator(cfg)
@@ -120,6 +120,28 @@ func start() {
 		CC:     cc,
 		Config: *cfg,
 	}.PullRequestReviewActivity)
+
+	// Register Go Major Upgrade workflows and activities
+	w.RegisterWorkflow(golangmajor.GoMajorSweepWorkflow)
+	w.RegisterWorkflow(golangmajor.GoMajorUpgradeRepoWorkflow)
+	w.RegisterActivity(golangactivity.SearchGoRepositories)
+	w.RegisterActivity(golangactivity.FetchDependabotConfigFromGitHub)
+	w.RegisterActivity(golangactivity.DetectMajorUpgrades)
+	w.RegisterActivity(golangactivity.UpgradeDependency)
+	w.RegisterActivity(golangactivity.CountOpenMajorUpgradePRs)
+	w.RegisterActivity(golangactivity.CheckPRExistsForBranch)
+	w.RegisterActivity(golangactivity.PRCreate)
+	w.RegisterActivity(golangactivity.PRAddLabels)
+	w.RegisterActivity(golangactivity.PRComment)
+	w.RegisterActivity(gitactivity.CloneRepoForUpgrade)
+	w.RegisterActivity(gitactivity.GitCheckoutBranch)
+	w.RegisterActivity(gitactivity.CommitAndPush)
+	w.RegisterActivity(gitactivity.GitResetToMain)
+
+	logger.Info("Registered workflows and activities",
+		"queue", dunebotQueue,
+		"workflows", []string{"helloworld.Workflow", "github.PullRequestQueueWorkflow", "github.PullRequestReviewWorkflow", "golangmajor.GoMajorSweepWorkflow", "golangmajor.GoMajorUpgradeRepoWorkflow"},
+	)
 
 	err = w.Run(worker.InterruptCh())
 	if err != nil {
