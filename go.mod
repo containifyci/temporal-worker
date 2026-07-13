@@ -3,7 +3,7 @@ module github.com/containifyci/temporal-worker
 go 1.26.0
 
 require (
-	github.com/containifyci/dunebot v0.3.12
+	github.com/containifyci/dunebot v0.3.13
 	github.com/containifyci/go-self-update v0.2.7
 	github.com/dusted-go/logging v1.3.0
 	github.com/golang/mock v1.6.0
