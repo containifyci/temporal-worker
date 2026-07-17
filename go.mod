@@ -7,7 +7,7 @@ require (
 	github.com/containifyci/go-self-update v0.2.7
 	github.com/dusted-go/logging v1.3.0
 	github.com/golang/mock v1.6.0
-	github.com/google/go-github/v85 v85.0.0
+	github.com/google/go-github/v89 v89.0.0
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
 	github.com/palantir/go-githubapp v0.46.0
 	github.com/stretchr/testify v1.11.1
@@ -29,7 +29,6 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.5.2 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/google/go-github/v88 v88.0.0 // indirect
-	github.com/google/go-github/v89 v89.0.0 // indirect
 	github.com/google/go-querystring v1.2.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.3 // indirect
@@ -62,3 +61,5 @@ require (
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
+
+replace github.com/containifyci/dunebot => github.com/franky-agent/dunebot v0.3.14-fix1
