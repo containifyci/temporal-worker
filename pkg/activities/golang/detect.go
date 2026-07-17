@@ -102,7 +102,10 @@ func DetectMajorUpgrades(ctx context.Context, i DetectMajorUpgradesInputs) (Dete
 
 	output, err := cmd.Output()
 	if err != nil {
-		return DetectMajorUpgradesOutputs{}, fmt.Errorf("failed to execute 'go list -e -m -u -json all': %w", err)
+		if len(env) > 0 {
+			logger.Error("Detecting major upgrades", "env", env)
+		}
+		return DetectMajorUpgradesOutputs{}, fmt.Errorf("failed to execute 'go list -e -m -u -json all': %w - %s", err, output)
 	}
 
 	// Parse JSON output (go list outputs multiple JSON objects, not an array)
