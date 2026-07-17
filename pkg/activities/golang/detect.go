@@ -100,7 +100,7 @@ func DetectMajorUpgrades(ctx context.Context, i DetectMajorUpgradesInputs) (Dete
 
 	cmd.Env = env
 
-	output, err := cmd.Output()
+	output, err := cmd.CombinedOutput()
 	if err != nil {
 		if len(env) > 0 {
 			logger.Error("Detecting major upgrades", "env", env)
