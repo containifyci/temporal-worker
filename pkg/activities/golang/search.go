@@ -3,7 +3,6 @@ package golang
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -57,10 +56,6 @@ func SearchGoRepositories(ctx context.Context, i SearchGoRepositoriesInputs) (Se
 	logger.Info("Searching for Go repositories", "organization", i.Organization, "language", i.Language)
 
 	githubToken := os.Getenv("GITHUB_TOKEN")
-	if githubToken == "" {
-		return SearchGoRepositoriesOutputs{}, errors.New("GITHUB_TOKEN environment variable is required")
-	}
-
 	var allRepos []string
 	page := 1
 	totalCount := 0
@@ -114,7 +109,9 @@ func fetchRepositoryPage(ctx context.Context, query string, page, perPage int, t
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
-	req.Header.Set("Authorization", "Bearer "+token)
+	if len(token) > 0 {
+		req.Header.Set("Authorization", "Bearer "+token)
+	}
 	req.Header.Set("Accept", "application/vnd.github+json")
 
 	resp, err := client.Do(req)
