@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	github "github.com/google/go-github/v85/github"
+	github "github.com/google/go-github/v89/github"
 	"go.temporal.io/sdk/activity"
 	"go.uber.org/zap"
 
@@ -34,7 +34,7 @@ func CountOpenMajorUpgradePRs(ctx context.Context, i CountOpenMajorUpgradePRsInp
 		return CountOpenMajorUpgradePRsOutputs{}, fmt.Errorf("GITHUB_TOKEN environment variable is required")
 	}
 
-	client := githubactivity.NewGitHubClient(ctx, githubToken)
+	client := githubactivity.NewGitHubClient(githubToken)
 
 	// List all open PRs
 	allPRs := make([]*github.PullRequest, 0)
@@ -99,7 +99,7 @@ func CheckPRExistsForBranch(ctx context.Context, i CheckPRExistsForBranchInputs)
 		return CheckPRExistsForBranchOutputs{}, fmt.Errorf("GITHUB_TOKEN environment variable is required")
 	}
 
-	client := githubactivity.NewGitHubClient(ctx, githubToken)
+	client := githubactivity.NewGitHubClient(githubToken)
 
 	// List open PRs and find one with matching head branch
 	opt := &github.PullRequestListOptions{
@@ -167,7 +167,7 @@ func PRCreate(ctx context.Context, i PRCreateInputs) (PRCreateOutputs, error) {
 		return PRCreateOutputs{}, fmt.Errorf("GITHUB_TOKEN environment variable is required")
 	}
 
-	client := githubactivity.NewGitHubClient(ctx, githubToken)
+	client := githubactivity.NewGitHubClient(githubToken)
 	sugar := zap.NewExample().Sugar()
 
 	// Get the default branch
@@ -227,7 +227,7 @@ func PRAddLabels(ctx context.Context, i PRAddLabelsInputs) error {
 		return fmt.Errorf("GITHUB_TOKEN environment variable is required")
 	}
 
-	client := githubactivity.NewGitHubClient(ctx, githubToken)
+	client := githubactivity.NewGitHubClient(githubToken)
 	sugar := zap.NewExample().Sugar()
 	accessor := NewAccessor(client, sugar)
 
@@ -256,7 +256,7 @@ func PRComment(ctx context.Context, i PRCommentInputs) (string, error) {
 		return "", fmt.Errorf("GITHUB_TOKEN environment variable is required")
 	}
 
-	client := githubactivity.NewGitHubClient(ctx, githubToken)
+	client := githubactivity.NewGitHubClient(githubToken)
 
 	_, _, err := client.Issues.CreateComment(ctx, i.Org, i.RepoName, i.ID, &github.IssueComment{
 		Body: &i.Message,

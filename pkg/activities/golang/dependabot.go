@@ -93,7 +93,7 @@ func FetchDependabotConfigFromGitHub(ctx context.Context, i FetchDependabotConfi
 	}
 
 	// Create GitHub client using the shared helper
-	client := githubactivity.NewGitHubClient(ctx, githubToken)
+	client := githubactivity.NewGitHubClient(githubToken)
 
 	// Try both .yaml and .yml extensions
 	filePaths := []string{".github/dependabot.yaml", ".github/dependabot.yml"}

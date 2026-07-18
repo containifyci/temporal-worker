@@ -1,24 +1,24 @@
 package github
 
 import (
-	"context"
 	"net/http"
 
-	github "github.com/google/go-github/v85/github"
+	github "github.com/google/go-github/v89/github"
 	"golang.org/x/oauth2"
 )
 
 // NewGitHubClient creates an authenticated GitHub client using a personal access token
-func NewGitHubClient(ctx context.Context, token string) *github.Client {
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: token},
-	)
-	tc := oauth2.NewClient(ctx, ts)
-	return github.NewClient(tc)
+func NewGitHubClient(token string) *github.Client {
+	client, err := github.NewClient(github.WithAuthToken(token))
+	if err != nil {
+		// WithAuthToken should never return an error, but handle it defensively
+		panic("unexpected error creating GitHub client: " + err.Error())
+	}
+	return client
 }
 
 // NewGitHubClientWithHTTP creates an authenticated GitHub client with a custom HTTP client
-func NewGitHubClientWithHTTP(ctx context.Context, token string, httpClient *http.Client) *github.Client {
+func NewGitHubClientWithHTTP(token string, httpClient *http.Client) *github.Client {
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
 	)
@@ -34,5 +34,9 @@ func NewGitHubClientWithHTTP(ctx context.Context, token string, httpClient *http
 		Timeout:       httpClient.Timeout,
 		Jar:           httpClient.Jar,
 	}
-	return github.NewClient(oauthClient)
+	client, err := github.NewClient(github.WithHTTPClient(oauthClient))
+	if err != nil {
+		panic("unexpected error creating GitHub client: " + err.Error())
+	}
+	return client
 }
