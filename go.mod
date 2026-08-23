@@ -10,11 +10,11 @@ require (
 	github.com/google/go-github/v90 v90.0.0
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
 	github.com/palantir/go-githubapp v0.47.0
-	github.com/stretchr/testify v1.11.1
+	github.com/stretchr/testify v1.12.1
 	go.temporal.io/api v1.63.5
-	go.temporal.io/sdk v1.47.0
+	go.temporal.io/sdk v1.48.0
 	go.uber.org/zap v1.28.0
-	golang.org/x/mod v0.39.0
+	golang.org/x/mod v0.40.0
 	golang.org/x/oauth2 v0.36.0
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -22,7 +22,6 @@ require (
 require (
 	github.com/bradleyfalzon/ghinstallation/v2 v2.19.0 // indirect
 	github.com/containifyci/oauth2-storage v0.2.2 // indirect
-	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/facebookgo/clock v0.0.0-20150410010913-600d898af40a // indirect
 	github.com/gofri/go-github-ratelimit v1.1.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
@@ -38,10 +37,9 @@ require (
 	github.com/mattn/go-colorable v0.1.15 // indirect
 	github.com/mattn/go-isatty v0.0.24 // indirect
 	github.com/nexus-rpc/nexus-proto-annotations v0.1.0 // indirect
-	github.com/nexus-rpc/sdk-go v0.6.0 // indirect
+	github.com/nexus-rpc/sdk-go v0.7.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20250401214520-65e299d6c5c9 // indirect
 	github.com/robfig/cron v1.2.0 // indirect
 	github.com/rs/zerolog v1.35.1 // indirect
@@ -49,6 +47,7 @@ require (
 	github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf // indirect
 	github.com/stretchr/objx v0.5.3 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
+	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/exp v0.0.0-20260611194520-c48552f49976 // indirect
 	golang.org/x/net v0.56.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
