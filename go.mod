@@ -9,7 +9,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/google/go-github/v90 v90.0.0
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
-	github.com/palantir/go-githubapp v0.47.0
+	github.com/palantir/go-githubapp v0.47.1
 	github.com/stretchr/testify v1.12.1
 	go.temporal.io/api v1.63.5
 	go.temporal.io/sdk v1.48.0
