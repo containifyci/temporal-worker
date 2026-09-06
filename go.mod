@@ -3,13 +3,13 @@ module github.com/containifyci/temporal-worker
 go 1.26.0
 
 require (
-	github.com/containifyci/dunebot v0.3.17
+	github.com/containifyci/dunebot v0.3.18
 	github.com/containifyci/go-self-update v0.2.7
 	github.com/dusted-go/logging v1.3.0
 	github.com/golang/mock v1.6.0
 	github.com/google/go-github/v90 v90.0.0
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
-	github.com/palantir/go-githubapp v0.47.1
+	github.com/palantir/go-githubapp v0.47.2
 	github.com/stretchr/testify v1.12.1
 	go.temporal.io/api v1.63.5
 	go.temporal.io/sdk v1.48.0
@@ -21,7 +21,7 @@ require (
 
 require (
 	github.com/bradleyfalzon/ghinstallation/v2 v2.19.0 // indirect
-	github.com/containifyci/oauth2-storage v0.2.2 // indirect
+	github.com/containifyci/oauth2-storage v0.2.3 // indirect
 	github.com/facebookgo/clock v0.0.0-20150410010913-600d898af40a // indirect
 	github.com/gofri/go-github-ratelimit v1.1.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
@@ -49,14 +49,14 @@ require (
 	go.uber.org/multierr v1.10.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/exp v0.0.0-20260611194520-c48552f49976 // indirect
-	golang.org/x/net v0.56.0 // indirect
+	golang.org/x/net v0.58.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
-	golang.org/x/text v0.40.0 // indirect
+	golang.org/x/text v0.41.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260630182238-925bb5da69e7 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260630182238-925bb5da69e7 // indirect
-	google.golang.org/grpc v1.83.0 // indirect
-	google.golang.org/protobuf v1.36.11 // indirect
+	google.golang.org/grpc v1.83.2 // indirect
+	google.golang.org/protobuf v1.36.12 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
