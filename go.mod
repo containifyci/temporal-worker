@@ -14,8 +14,8 @@ require (
 	go.temporal.io/api v1.63.5
 	go.temporal.io/sdk v1.48.0
 	go.uber.org/zap v1.28.0
-	golang.org/x/mod v0.40.0
-	golang.org/x/oauth2 v0.36.0
+	golang.org/x/mod v0.41.0
+	golang.org/x/oauth2 v0.37.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
