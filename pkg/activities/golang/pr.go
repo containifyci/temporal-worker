@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	github "github.com/google/go-github/v90/github"
+	github "github.com/google/go-github/v92/github"
 	"go.temporal.io/sdk/activity"
 	"go.uber.org/zap"
 
@@ -258,8 +258,8 @@ func PRComment(ctx context.Context, i PRCommentInputs) (string, error) {
 
 	client := githubactivity.NewGitHubClient(githubToken)
 
-	_, _, err := client.Issues.CreateComment(ctx, i.Org, i.RepoName, i.ID, &github.IssueComment{
-		Body: &i.Message,
+	_, _, err := client.Issues.CreateComment(ctx, i.Org, i.RepoName, i.ID, github.IssueCommentRequest{
+		Body: i.Message,
 	})
 	if err != nil {
 		return "", fmt.Errorf("failed to add comment to PR#%d: %w", i.ID, err)
@@ -296,5 +296,3 @@ func (a *Accessor) GetDefaultBranch(ctx context.Context, repo, org string) (stri
 func (a *Accessor) IssuesAddLabels(ctx context.Context, org, repo string, number int, labels []string) ([]*github.Label, *github.Response, error) {
 	return a.client.Issues.AddLabelsToIssue(ctx, org, repo, number, labels)
 }
-
-
