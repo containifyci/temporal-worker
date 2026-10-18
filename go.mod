@@ -7,15 +7,14 @@ require (
 	github.com/containifyci/go-self-update v0.2.7
 	github.com/dusted-go/logging v1.3.0
 	github.com/golang/mock v1.6.0
-	github.com/google/go-github/v90 v90.0.0
 	github.com/google/go-github/v92 v92.0.0
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
 	github.com/palantir/go-githubapp v0.48.0
 	github.com/stretchr/testify v1.12.1
-	go.temporal.io/api v1.63.6
+	go.temporal.io/api v1.63.7
 	go.temporal.io/sdk v1.49.0
 	go.uber.org/zap v1.28.0
-	golang.org/x/mod v0.41.0
+	golang.org/x/mod v0.42.0
 	golang.org/x/oauth2 v0.37.0
 	gopkg.in/yaml.v3 v3.0.1
 )
